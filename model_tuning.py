@@ -7,7 +7,6 @@ def search_params(
         param_grid=None, distributions=None,
         fit_args=(), fit_kwargs={}, search_args=(), search_kwargs={}
 ):
-    grid_search = None
     if random:
         grid_search = RandomizedSearchCV(model, distributions, *search_args, **search_kwargs)
     else:
