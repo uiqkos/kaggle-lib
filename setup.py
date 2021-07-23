@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
     name='kaggle-lib',
-    version='0.1',
+    version='0.2',
     description='Lib for kaggle',
     author='Uiqkos',
     packages=['kaggle_lib'],
-    install_requires=['kaggle', 'pandas', 'scikit-learn'],
+    install_requires=['kaggle', 'pandas'],
 )

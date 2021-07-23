@@ -5,28 +5,26 @@ import os
 import webbrowser
 import pickle
 
-class Submission():
-    submission_id = 0
 
+class Submission:
     def __init__(self, compete, name, work_dir, description=None):
+        self.id = str(time.time())
         self.compete = compete
-        self.name = f'{Submission.submission_id} -- {name}'
+        self.name = f'{name} - {self.id}'
         self.description = description
-        self.new_folder_path = work_dir + f'/{Submission.submission_id} - {name}'
+        self.new_folder_path = work_dir + self.name
 
         self.kaggle_api = KaggleApi()
         self.kaggle_api.authenticate()
 
-        Submission.submission_id += 1
-
         if not os.path.exists(self.new_folder_path):
             os.mkdir(self.new_folder_path)
 
-    def save_model(self, model, model_file_name=None):
-        if model_file_name is None:
-            model_file_name = str(model).replace('\\', '')
+    def save_model(self, model, file_name=None):
+        if file_name is None:
+            file_name = str(model).replace('\\', '')
 
-        with open(f'{self.new_folder_path}/{model_file_name}.pickle', 'wb') as pickle_file:
+        with open(f'{self.new_folder_path}/{file_name}.pickle', 'wb') as pickle_file:
             pickle.dump(model, pickle_file)
 
         return self
@@ -37,9 +35,9 @@ class Submission():
 
         return self
 
-    def save_predictions(self, predictions, index, predictions_file_name='predictions.csv', columns=None):
+    def save_predictions(self, predictions, columns, index, file_name='predictions.csv'):
         pd.DataFrame(dict(zip(columns, [index, predictions])))\
-            .to_csv(f'{self.new_folder_path}/{predictions_file_name}', index=False)
+            .to_csv(f'{self.new_folder_path}/{file_name}', index=False)
 
         return self
 
