@@ -126,6 +126,7 @@ class Submission:
         command = f'kaggle competitions submit -c {self.compete} -f "{self.new_folder_path}/{predictions_file_name}" -m "{self.description}"'
         print(command)
         output = os.system(command)
+        print()
         print('Output: ', output)
 
         return self
