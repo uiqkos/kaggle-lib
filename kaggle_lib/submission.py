@@ -1,5 +1,6 @@
 import datetime
 import io
+import json
 import re
 
 from kaggle import KaggleApi
@@ -87,6 +88,7 @@ class Submission:
         if save_summary_to_readme:
             summary = io.StringIO()
             model.summary(print_fn=lambda s: print(s, file=summary))
+
             if self.readme is None:
                 raise Exception("'create_readme' should be True")
 
@@ -96,13 +98,15 @@ class Submission:
             with open(f'{self.new_folder_path}/{file_name}.pickle', 'wb') as pickle_file:
                 pickle.dump(model, pickle_file)
 
-        elif save_format in ('h5', 'config'):
-            if save_format == 'config':
-                with open(f'{self.new_folder_path}/{file_name}', 'w') as config_file:
-                    config_file.write(model.get_config())
+        elif save_format == 'config':
+            with open(f'{self.new_folder_path}/{file_name}.json', 'w') as config_file:
+                json.dump(model.get_config(), config_file)
 
-            elif save_format == 'h5':
-                model.save(f'{self.new_folder_path}/{file_name}', *args, **kwargs)
+        elif save_format == 'h5':
+            model.save(f'{self.new_folder_path}/{file_name}', *args, **kwargs)
+
+        else:
+            raise Exception('Undefined save_format')
 
         return self
 
